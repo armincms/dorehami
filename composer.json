@@ -1,0 +1,30 @@
+{
+    "name": "armincms/dorehami",
+    "description": "A Laravel Nova tool.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0",
+        "armincms/truth-or-dare" : "~0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Armincms\\Dorehami\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Armincms\\Dorehami\\ToolServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
