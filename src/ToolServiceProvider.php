@@ -2,6 +2,7 @@
 
 namespace Armincms\Dorehami;
  
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider; 
 
 class ToolServiceProvider extends ServiceProvider
