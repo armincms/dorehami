@@ -12,7 +12,9 @@ class PlayerController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, array_map(function($rules) {
-            $rules[] = 'required';
+            if(is_array($rules)) {
+                $rules[] = 'required';
+            } 
 
             return $rules;
         }, $this->rules()));
