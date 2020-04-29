@@ -8,6 +8,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1.0",
+        "armincms/passport" : "~0.1",
         "armincms/truth-or-dare" : "~0.1"
     },
     "autoload": {
