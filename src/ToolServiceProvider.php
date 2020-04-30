@@ -3,7 +3,8 @@
 namespace Armincms\Dorehami;
  
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider; 
+use Illuminate\Support\ServiceProvider;
+use Laravel\Nova\Nova; 
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,18 @@ class ToolServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $this->routes();
         }); 
+
+        Nova::serving(function() {
+            Nova::resources([
+                SmsPanel::class
+            ]);
+        });
+
+        $config = collect(SmsPanel::options())->pluck('value', 'key');
+
+        \Config::set('armin-sms.username', $config->get('username'));
+        \Config::set('armin-sms.password', $config->get('password'));
+        \Config::set('armin-sms.from', $config->get('number'));
     }
 
     /**
