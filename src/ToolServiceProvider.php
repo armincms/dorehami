@@ -24,12 +24,6 @@ class ToolServiceProvider extends ServiceProvider
                 SmsPanel::class
             ]);
         });
-
-        $config = collect(SmsPanel::options())->pluck('value', 'key');
-
-        \Config::set('armin-sms.username', $config->get('username'));
-        \Config::set('armin-sms.password', $config->get('password'));
-        \Config::set('armin-sms.from', $config->get('number'));
     }
 
     /**
@@ -56,6 +50,12 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->resolving('qasedak', function() {  
+            $config = collect(SmsPanel::options());
+
+            \Config::set('amrin-sms.username', $config->get('username'));
+            \Config::set('amrin-sms.password', $config->get('password'));
+            \Config::set('amrin-sms.from', $config->get('number')); 
+        });
     }
 }
