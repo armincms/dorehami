@@ -35,7 +35,7 @@ class GameController extends Controller
 
         return [
             'status' => 'ok',
-            'game'   => $game->getGameIdentifier(),   
+            'gameId'   => $game->getGameIdentifier(),   
         ];
     }
 
@@ -64,7 +64,7 @@ class GameController extends Controller
 
         return [
             'status' => 'ok',
-            'game'   => $game->getGameIdentifier(),   
+            'gameId'   => $game->getGameIdentifier(),   
         ];
     }
 }
