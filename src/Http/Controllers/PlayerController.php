@@ -58,7 +58,7 @@ class PlayerController extends Controller
     {
         return [
             'gameId' =>  function ($attribute, $value, $fail) {
-                if (is_null(Game::find($value))) {
+                if (is_null(Game::whereGame($value))) {
                     $fail('Game ID is invalid.');
                 }
             },
