@@ -21,7 +21,7 @@ class GameController extends Controller
      * @param string $game 
      * @return array
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
     	$game = tap(new Game, function($game) use ($request) {
             $user = $request->user() ?? \Core\User\Models\Admin::first();
