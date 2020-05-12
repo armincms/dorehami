@@ -46,7 +46,7 @@ class PlayerController extends Controller
     public function fetchData(Request $request)
     {
         return [
-            'game_id' => $request->gameId,
+            'game_id' => Game::whereGame($request->gameId)->first()->id,
             'age' => $request->age,
             'marital' => $request->marital,
             'gender' => $request->gender,
@@ -58,7 +58,7 @@ class PlayerController extends Controller
     {
         return [
             'gameId' =>  function ($attribute, $value, $fail) {
-                if (is_null(Game::whereGame($value))) {
+                if (Game::whereGame($value)->count() === 0) {
                     $fail('Game ID is invalid.');
                 }
             },
