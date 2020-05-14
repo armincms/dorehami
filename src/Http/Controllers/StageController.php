@@ -15,9 +15,18 @@ class StageController extends Controller
 {  
     public function handle(Request $request, $gameId, $playerId)
     {
-        $game = Game::whereGame($gameId)->first();
+        $game = Game::withCount('stages')->whereGame($gameId)->first();
 
-        $this->validate($request->merge(['stage']), [ 
+        if($game->stages_count >= $game->stage) {
+            return response()->json([
+                'message' => 'Your Game Ended',
+                'data' => [
+                    'stage' => 'Your Game Ended',
+                ],
+            ], 422);
+        }
+
+        $this->validate($request, [ 
             'questionId' => [
                 'required', 
                 function($attribute, $value, $fail) {
@@ -32,13 +41,6 @@ class StageController extends Controller
                     if(! boolval($request->passed) && is_null(Consequence::find($value))){
                         $fail("The consequence is invalid");
                     }
-                }
-            ],
-            'stage' => [ 
-                function($attribute, $value, $fail) use ($request, $game) {
-                    if($game->stages()->count() === $game->stage){
-                        $fail("Your game ended");
-                    } 
                 }
             ], 
             'passed' => 'required'
