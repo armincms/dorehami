@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get("/", "SchemaController@handle")->name('schema');
-Route::get("theme", "ThemeController@handle"); 
-Route::post("player", "PlayerController@create"); 
-Route::put("player/{player}", "PlayerController@update"); 
-Route::post("stage", "StageController@create"); 
-Route::put("stage/{stage}", "StageController@update"); 
-Route::get("game/{gameId}/player/{playerId}/question", "QuestionController@handle"); 
-Route::get("game/{gameId}/player/{playerId}/consequence", "ConsequenceController@handle");  
-Route::apiResource("game", "GameController"); 
+Route::get('/', 'SchemaController@handle')->name('schema');
+Route::get('theme', 'ThemeController@handle');   
+Route::apiResource('player', 'PlayerController');  
+Route::post('game/{gameId}/theme/{themeId}', 'AttachController@theme'); 
+Route::delete('game/{gameId}/theme/{themeId}', 'DetachController@theme'); 
+Route::post('game/{gameId}/player/{playerId}', 'AttachController@player'); 
+Route::delete('game/{gameId}/player/{playerId}', 'DetachController@player'); 
+Route::get('game/{gameId}/player/{playerId}/question', 'QuestionController@handle'); 
+Route::get('game/{gameId}/player/{playerId}/consequence', 'ConsequenceController@handle');  
+Route::post('game/{gameId}/player/{playerId}/stage', 'StageController@handle');  
+Route::apiResource('game', 'GameController'); 

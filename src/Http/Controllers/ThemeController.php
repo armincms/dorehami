@@ -13,5 +13,5 @@ class ThemeController extends Controller
         $games = Theme::paginate($request->perPage ?? 100);
 
         return new ThemeCollection($games);
-    } 
+    }  
 }

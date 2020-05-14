@@ -11,8 +11,10 @@ class ConsequenceController extends Controller
 {    
     public function handle(Request $request, $gameId, $playerId)
     { 
-        $game = Game::with('themes')->findOrFail($gameId); 
-        $player = Player::where('game_id', $gameId)->findOrFail($playerId); 
+        $game = Game::with('themes')->whereGame($gameId)->firstOrFail(); 
+        $player = Player::whereHas('games', function($q) use ($gameId) {
+            $q->where($q->qualifyColumn('game'), $gameId);
+        })->findOrFail($playerId); 
 
         $consequence = Consequence::wherePunishment(intval($request->punishment)) 
                             ->whereHas('themes', function($q) use ($game) {
@@ -21,15 +23,9 @@ class ConsequenceController extends Controller
                             ->where(function($q) use ($game) {
                                 $q->whereNull('level')->orWhere("level", 'like', "%{$game->level}%");
                             })
-                            ->where(function($q) use ($player) {
-                                $q->whereNull('gender')->orWhere("gender", 'like', "%{$player->gender}%");
-                            })
-                            ->where(function($q) use ($player) {
-                                $q->whereNull('marital')->orWhere("marital", 'like', "%{$player->marital}%");
-                            })
-                            ->where(function($q) use ($player) {
-                                $q->whereNull('age')->orWhere("age", 'like', "%{$player->age}%");
-                            }) 
+                            ->gender($player->gender)
+                            ->marital($player->marital)
+                            ->age($player->age) 
                             ->inRandomOrder() 
                             ->firstOrFail();
 

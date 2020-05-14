@@ -2,6 +2,7 @@
 
 namespace Armincms\Dorehami\Http\Controllers;
  
+use Armincms\Dorehami\Http\Resources\PlayerCollection;
 use Armincms\TruthOrDare\Player;
 use Armincms\TruthOrDare\Game;
 use Illuminate\Http\Request; 
@@ -9,7 +10,14 @@ use Armincms\RawData\Common;
 
 class PlayerController extends Controller
 {  
-    public function create(Request $request)
+    public function index(Request $request)
+    {
+        $games = Player::authenticate($request->user())->paginate($request->perPage ?? 100);
+
+        return new PlayerCollection($games);
+    }  
+
+    public function store(Request $request)
     {
         $this->validate($request, array_map(function($rules) {
             if(is_array($rules)) {
@@ -23,30 +31,49 @@ class PlayerController extends Controller
             $player->forceFill($this->fetchData($request))->save();
         }); 
 
-        return response()->json([ 
-            "status" => "ok",
-            "playerId" => $player->id
-        ], 201);
+        return $this->okResponse($player->id, 201);
+    } 
+
+    public function show(Request $request, $playerId)
+    { 
+        $player = Player::findOrFail($playerId);
+
+        return [
+            'playerId' => $player->id, 
+            'name'     => $player->name, 
+            'marital'  => $player->marital, 
+            'gender'   => $player->gender, 
+            'age'      => $player->geagender,
+        ];
     } 
 
     public function update(Request $request, $id)
-    {
-        $this->validate($request, $this->rules());
-
+    { 
         $player = tap(Player::findOrFail($id), function($player) use ($request) {
             $player->forceFill(array_filter($this->fetchData($request)))->save();  
         });
+ 
+        return $this->okResponse($player->id);
+    } 
 
+    public function delete(Request $request, $playerId)
+    {
+        Player::findOrFail($playerId)->delete();
+
+        return $this->okResponse($playerId, 204);
+    }
+
+    public function okResponse($playerId, $status = 200)
+    { 
         return response()->json([ 
             "status" => "ok",
-            "playerId" => $player->id
-        ], 200);
-    } 
+            "playerId" => $playerId
+        ], $status);
+    }
 
     public function fetchData(Request $request)
     {
-        return [
-            'game_id' => Game::whereGame($request->gameId)->first()->id,
+        return [ 
             'age' => $request->age,
             'marital' => $request->marital,
             'gender' => $request->gender,
@@ -56,12 +83,7 @@ class PlayerController extends Controller
 
     public function rules()
     {
-        return [
-            'gameId' =>  function ($attribute, $value, $fail) {
-                if (Game::whereGame($value)->count() === 0) {
-                    $fail('Game ID is invalid.');
-                }
-            },
+        return [ 
             'name' => [ 
             ],
             'age' => [

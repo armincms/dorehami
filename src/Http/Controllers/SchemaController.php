@@ -93,29 +93,98 @@ class SchemaController extends Controller
                 ], 
             ], 
             'player' => [ 
+                'index' => [
+                    'method' => 'get',
+                    'path'   => 'dorehami/player',
+                    'params' => [
+                        'per_page' => [
+                            'type' => 'integer',
+                            'default' => 15,
+                            'required' => false,
+                        ],
+                        'page' => [
+                            'type' => 'integer',
+                            'default' => 1,
+                            'required' => false,
+                        ],
+                    ],
+                    'response' => [ 
+                        'code'  => 200,
+                        'params' => [ 
+                            'links' => [
+                                'first' => [
+                                    'type' => 'string',
+                                    'nullable' => true,
+                                ],
+                                'last' => [
+                                    'type' => 'string',
+                                    'nullable' => true,
+                                ],
+                                'prev' => [
+                                    'type' => 'string',
+                                    'nullable' => true,
+                                ],
+                                'next' => [
+                                    'type' => 'string',
+                                    'nullable' => true,
+                                ],
+                            ], 
+                            'meta' => [
+                                'current_page' => [
+                                    'type' => 'integer'
+                                ],
+                                'from' => [
+                                    'type' => 'integer'
+                                ],
+                                'last_page' => [
+                                    'type' => 'integer'
+                                ],
+                                'path' => [
+                                    'type' => 'string', 
+                                ],
+                                'per_page' => [
+                                    'type' => 'integer'
+                                ],
+                                'to' => [
+                                    'type' => 'integer'
+                                ],
+                                'total' => [
+                                    'type' => 'integer'
+                                ]
+                            ], 
+                            'data' => [
+                                'type' => 'array[playerObejct]'
+                            ], 
+                        ],
+                        'playerObejct' => [
+                            'playerId' => [
+                                'type' => 'integer'
+                            ],
+                            'name' => [
+                                'type' => 'string'
+                            ], 
+                        ],
+                    ],
+                ], 
                 'create' => [ 
                     'method' => 'post',
                     'path'   => 'dorehami/player',
-                    'params' => [
-                        "gameId" => [
-                            'type' => 'integer',
-                            'required' => true,
-                        ],
-                        "name" => [
+                    'params' => [ 
+                        'name' => [
                             'type' => 'string',
                             'required' => true,
                         ],
-                        "age" => [
+                        'age' => [
                             'type' => 'string',
                             'values' => Common::ages()->keys(),
                             'required' => true,
                         ],
-                        "gender" => [
+                        'gender' => [
                             'type' => 'string',
                             'values' => Common::genders()->keys(),
                             'required' => true,
                         ],
-                        "marital" => [
+                        'marital' => [
                             'type' => 'string',
                             'values' => Common::maritals()->keys(),
                             'required' => true,
@@ -135,25 +204,25 @@ class SchemaController extends Controller
                     'method' => 'post',
                     'path'   => 'dorehami/player/{playerId}',
                     'params' => [
-                        "_method" => [
-                            "type" => "string",
-                            "value"=> "PUT",
+                        '_method' => [
+                            'type' => 'string',
+                            'value'=> 'PUT',
                         ], 
-                        "name" => [
+                        'name' => [
                             'type' => 'string',
                             'required' => false,
                         ],
-                        "age" => [
+                        'age' => [
                             'type' => 'string',
                             'values' => Common::ages()->keys(),
                             'required' => false,
                         ],
-                        "gender" => [
+                        'gender' => [
                             'type' => 'string',
                             'values' => Common::genders()->keys(),
                             'required' => false,
                         ],
-                        "marital" => [
+                        'marital' => [
                             'type' => 'string',
                             'values' => Common::maritals()->keys(),
                             'required' => false,
@@ -169,32 +238,50 @@ class SchemaController extends Controller
                         ]
                     ]
                 ], 
-                // 'show' => [ 
-                //     'method' => 'get',
-                //     'path'   => 'dorehami/player/{playerId}',
-                //     'params' => [  
-                //     ],
-                //     'response' => [ 
-                //         'code'  => 201,
-                //         'params' => [
-                //             "playerId" => [
-                //                 "type" => "integer",
-                //             ],
-                //             "name" => [
-                //                 "type" => "string",
-                //             ],
-                //             "marital" => [
-                //                 "type" => "string", 
-                //             ],
-                //             "gender" => [
-                //                 "type" => "string", 
-                //             ],
-                //             "age" => [
-                //                 "type" => "string", 
-                //             ],
-                //         ]
-                //     ]
-                // ], 
+                'show' => [ 
+                    'method' => 'get',
+                    'path'   => 'dorehami/player/{playerId}',
+                    'params' => [  
+                    ],
+                    'response' => [ 
+                        'code'  => 200,
+                        'params' => [
+                            'playerId' => [
+                                'type' => 'integer',
+                            ],
+                            'name' => [
+                                'type' => 'string',
+                            ],
+                            'marital' => [
+                                'type' => 'string', 
+                            ],
+                            'gender' => [
+                                'type' => 'string', 
+                            ],
+                            'age' => [
+                                'type' => 'string', 
+                            ],
+                        ]
+                    ]
+                ], 
+                'delete' => [ 
+                    'method' => 'post',
+                    'path'   => 'dorehami/player/{playerId}',
+                    'params' => [  
+                        '_method' => [
+                            'type'  => 'string',
+                            'value' => 'DELETE',
+                        ],
+                    ],
+                    'response' => [ 
+                        'code'  => 204,
+                        'params' => [
+                            'status' => [
+                                'type' => 'string',
+                            ], 
+                        ]
+                    ]
+                ], 
             ], 
             'game' => [
                 'index' => [
@@ -344,6 +431,20 @@ class SchemaController extends Controller
                             ]
                         ],
                     ], 
+                    'player' => [
+                        'method' => 'post',
+                        'path'   => 'dorehami/game/{gameId}/player/{playerId}', 
+                        'params' => [  
+                        ],
+                        'response' => [ 
+                            'code'  => 201,
+                            'params' => [
+                                'status' => [
+                                    'type' => 'string', 
+                                ],  
+                            ]
+                        ],
+                    ], 
                 ], 
                 'dettach' => [  
                     'theme' => [
@@ -356,7 +457,25 @@ class SchemaController extends Controller
                             ],
                         ],
                         'response' => [ 
-                            'code'  => 200,
+                            'code'  => 204,
+                            'params' => [
+                                'status' => [
+                                    'type' => 'string', 
+                                ],  
+                            ]
+                        ],
+                    ], 
+                    'player' => [
+                        'method' => 'post',
+                        'path'   => 'dorehami/game/{gameId}/player/{playerId}', 
+                        'params' => [  
+                            '_method' => [
+                                'type'  => 'string',
+                                'value' => 'DELETE', 
+                            ],
+                        ],
+                        'response' => [ 
+                            'code'  => 204,
                             'params' => [
                                 'status' => [
                                     'type' => 'string', 
@@ -369,9 +488,9 @@ class SchemaController extends Controller
                     'method' => 'get',
                     'path'   => 'dorehami/game/{gameId}/player/{playerId}/question',
                     'params' => [ 
-                        "truth" => [
-                            "type" => "boolean",
-                            "default" => true,
+                        'truth' => [
+                            'type' => 'boolean',
+                            'default' => true,
                             'required' => true,
                         ],
                     ],
@@ -391,9 +510,9 @@ class SchemaController extends Controller
                     'method' => 'get',
                     'path'   => 'dorehami/game/{gameId}/player/{playerId}/consequence',
                     'params' => [ 
-                        "punishment" => [
-                            "type" => "boolean",
-                            "default" => true,
+                        'punishment' => [
+                            'type' => 'boolean',
+                            'default' => true,
                             'required' => true,
                         ],
                     ],
@@ -409,25 +528,24 @@ class SchemaController extends Controller
                         ], 
                     ],
                 ],
-            ],  
-            'stage' => [ 
-                'create' => [ 
+                'stage' => [ 
                     'method' => 'post',
-                    'path'   => 'dorehami/stage',
-                    'params' => [
-                        "gameId" => [
-                            'type' => 'integer',
-                            'required' => true,
-                        ],
-                        "playerId" => [
-                            'type' => 'integer',
-                            'required' => true,
-                        ],
-                        "questionId" => [
+                    'path'   => 'dorehami/game/{gameId}/player/{playerId}/stage',
+                    'params' => [ 
+                        'questionId' => [
                             'type' => 'integer',
                             'required' => true,
                         ], 
-                        "stage" => [
+                        'consequenceId' => [
+                            'type' => 'integer',
+                            'nullable' => true,
+                        ],  
+                        'passed' => [
+                            'type' => 'boolean',
+                            'required' => true,
+                            'default' => false,
+                        ],  
+                        'stage' => [
                             'type' => 'integer',
                             'required' => true,
                         ],  
@@ -442,35 +560,7 @@ class SchemaController extends Controller
                         ]
                     ]
                 ], 
-                'update' => [ 
-                    'method' => 'post',
-                    'path'   => 'dorehami/stage/{stageId}',
-                    'params' => [
-                        "_method" => [
-                            "type" => "string",
-                            "value"=> "PUT",
-                        ], 
-                        "passed" => [
-                            'type' => 'boolean',
-                            'required' => true,
-                            'default' => false,
-                        ], 
-                        "consequenceId" => [
-                            'type' => 'integer',
-                            'nullable' => true,
-                        ],   
-                    ],
-                    'response' => [ 
-                        'code'  => 200,
-                        'params' => [
-                            'status' => [
-                                'type' => 'string', 
-                            ], 
-                            'stageId' => 'integer',
-                        ]
-                    ]
-                ],  
-            ], 
+            ],   
         ]);
     } 
 }

@@ -3,6 +3,7 @@
 namespace Armincms\Dorehami\Http\Controllers;
  
 use Armincms\TruthOrDare\Game;
+use Armincms\TruthOrDare\Theme;
 use Illuminate\Http\Request;
 use Armincms\Dorehami\Http\Resources\GameCollection;
 
@@ -23,6 +24,8 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, ['level' => 'required']);
+
     	$game = tap(new Game, function($game) use ($request) {
             $user = $request->user() ?? \Core\User\Models\Admin::first();
 
@@ -47,6 +50,8 @@ class GameController extends Controller
      */
     public function update(Request $request, $game)
     {
+        $this->validate($request, ['level' => 'required']);
+
         $game = Game::whereGame($game)->firstOrFail();
 
          tap(new Game, function($game) use ($request) {
@@ -56,10 +61,7 @@ class GameController extends Controller
                 'user_id' => $user->getKey(),
                 'user_type' => $user->getMorphClass(),
                 'level' => $request->get('level'),
-            ])->save();
-
-            $game->players()->sync((array) $request->get('players'));
-            $game->themes()->sync((array) $request->get('themes'));
+            ])->save(); 
         });
 
         return [
