@@ -358,6 +358,9 @@ class SchemaController extends Controller
                             'level' => [
                                 'type' => 'string'
                             ],
+                            'stage' => [
+                                'type' => 'integer'
+                            ],
                             'created_at' => [
                                 'type' => 'string',
                                 'nullable' => true,
@@ -381,6 +384,11 @@ class SchemaController extends Controller
                             'type' => 'string',
                             'values' => Common::levels()->keys(),
                         ], 
+                        'stage' => [
+                            'type' => 'integer',
+                            'default' => 1,
+                            'required' => true,
+                        ], 
                     ],
                     'response' => [
                         'code'  => 201,
@@ -403,6 +411,11 @@ class SchemaController extends Controller
                         ], 
                         'level' => [
                             'type' => 'string',
+                            'required' => true,
+                        ],
+                        'stage' => [
+                            'type' => 'integer',
+                            'default' => 1,
                             'required' => true,
                         ], 
                     ],
@@ -544,11 +557,7 @@ class SchemaController extends Controller
                             'type' => 'boolean',
                             'required' => true,
                             'default' => false,
-                        ],  
-                        'stage' => [
-                            'type' => 'integer',
-                            'required' => true,
-                        ],  
+                        ],   
                     ],
                     'response' => [ 
                         'code'  => 201,

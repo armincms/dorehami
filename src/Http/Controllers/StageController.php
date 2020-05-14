@@ -17,7 +17,7 @@ class StageController extends Controller
     {
         $game = Game::whereGame($gameId)->first();
 
-        $this->validate($request, [ 
+        $this->validate($request->merge(['stage']), [ 
             'questionId' => [
                 'required', 
                 function($attribute, $value, $fail) {
@@ -34,16 +34,11 @@ class StageController extends Controller
                     }
                 }
             ],
-            'stage' => [
-                'required', 
+            'stage' => [ 
                 function($attribute, $value, $fail) use ($request, $game) {
-                    $similar = Stage::where([
-                        'game_id' => $game->id, 'stage' => $request->stage
-                    ])->count();
-
-                    if($similar > 0) {
-                        $fail("The stage number is invalid.");
-                    }
+                    if($game->stages()->count() === $game->stage){
+                        $fail("Your game ended");
+                    } 
                 }
             ], 
             'passed' => 'required'
@@ -52,8 +47,7 @@ class StageController extends Controller
         $stage = tap(new Stage, function($stage) use ($request, $game, $playerId) {
             $stage->forceFill([
                 'player_id'   => $playerId,
-                'game_id'     => $game->id,
-                'stage'       => intval($request->stage),
+                'game_id'     => $game->id, 
                 'passed'      => intval($request->passed),
                 'question_id' => $request->questionId, 
                 'consequence_id' => $request->consequenceId, 

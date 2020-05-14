@@ -24,7 +24,7 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, ['level' => 'required']);
+        $this->validate($request, ['level' => 'required', 'stage' => 'required']);
 
     	$game = tap(new Game, function($game) use ($request) {
             $user = $request->user() ?? \Core\User\Models\Admin::first();
@@ -33,6 +33,7 @@ class GameController extends Controller
                 'user_id' => $user->getKey(),
                 'user_type' => $user->getMorphClass(),
                 'level' => $request->get('level'),
+                'stage' => intval($request->get('stage')),
             ])->save(); 
         });
 
@@ -61,6 +62,7 @@ class GameController extends Controller
                 'user_id' => $user->getKey(),
                 'user_type' => $user->getMorphClass(),
                 'level' => $request->get('level'),
+                'stage' => intval($request->get('stage')),
             ])->save(); 
         });
 

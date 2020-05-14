@@ -18,7 +18,8 @@ class GameCollection extends ResourceCollection
         return $this->collection->map(function($game) {
         	return [
         		'gameId' => $game->game,
-           		'level' => 'easy',
+           		'level'  => 'easy',
+                'stage'  => $game->stage,
            		'created_at' => $game->created_at,
            		'updated_at' => $game->updated_at,
            		'deleted_at' => $game->deleted_at, 
