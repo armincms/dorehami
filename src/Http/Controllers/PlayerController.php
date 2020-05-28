@@ -56,7 +56,7 @@ class PlayerController extends Controller
         return $this->okResponse($player->id);
     } 
 
-    public function delete(Request $request, $playerId)
+    public function destroy(Request $request, $playerId)
     {
         Player::findOrFail($playerId)->delete();
 
